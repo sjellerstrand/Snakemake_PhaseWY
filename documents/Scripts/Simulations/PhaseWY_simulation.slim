@@ -1,0 +1,92 @@
+// This script is based on:
+// 14.5 Modeling both X and Y Chromosomes with a Pseudo-Autosomal Region (PAR)
+// 18.13 Tree-sequence recording and nucleotide-based models
+
+// This is a purely neutral model, which comes with some assumptions:
+// There will be no effects of background selection or genetic hitchiking, especially on Y. Differentiation is therefore expected to take longer than in reality.
+
+initialize() {
+	
+	// Define constants
+	if (exists("slimgui")) {
+		defineConstant("seed", 1);
+		defineConstant("popSize", 1000); // This parameter will vary test different backgrounds of genetic diversity. 
+		defineConstant("recRate", 1e-8); // The higher this is, the longer for differentiation to happen.
+		defineConstant("chromSize", 100000); // The chromosome will be divided in to half PAR, half sex-linked region.
+		defineConstant("generations", c(1000, 10000)); // How many generations to run, minimum 100
+	}
+	
+	// SLiM options
+	setSeed(seed);
+  if (isString(generations)) {
+    gen0 = asInteger(strsplit(generations, sep=","));
+  } else {
+    gen0 = generations;
+  }
+  genMid = NULL;
+  for (i in 0:(size(gen0) - 2)) {
+    gen1 = gen0[i];
+    gen2 = gen0[i + 1];
+
+    if (gen2 > 10000) {
+      // Steps every 10,000
+      step = 10000;
+      val = ceil((gen1 + step) / step) * step;
+      while (val < gen2) {
+        genMid = c(genMid, val);
+        val = val + step;
+      }
+    
+    } else if (gen2 > 10000) {
+      // Midpoint is smaller gen times 5
+      mid = gen1 * 5;
+      genMid = c(genMid, mid);
+    }
+    
+  }
+  genMid = asInteger(sort(unique(genMid)));
+  defineConstant("genOut", gen0);
+  defineConstant("genOutCheckpoint", genMid);
+    
+	initializeTreeSeq();
+	
+	// Mutation types
+	initializeMutationRate(0.0); // Disable neutral mutations
+	initializeMutationType("m3", 1.0, "f", 0.0);     // Y marker
+	
+	// 1 Mb chromosome; the PAR is 0.5 Mb at the start
+	initializeGenomicElementType("g1", m3, 1.0);
+	initializeGenomicElementType("g2", m3, 1.0);
+	initializeGenomicElement(g1, 0, asInteger(chromSize / 2 - 1));        // PAR
+	initializeGenomicElement(g2, asInteger(chromSize / 2),  asInteger(chromSize-1));  // non-PAR
+	
+	// turn on sex and model as an autosome
+	initializeSex("A");
+	
+	// no recombination in males outside PAR
+	initializeRecombinationRate(c(recRate, 0), asInteger(c((chromSize / 2 - 1), chromSize-1)), sex="M");
+	initializeRecombinationRate(recRate, sex="F");
+}
+
+1 late() {
+	// initialize the pop, with a Y marker for each male
+	sim.addSubpop("p1", popSize);
+	i = p1.individuals;
+	i[i.sex == "M"].genome2.addNewMutation(m3, 0.0, chromSize-1);
+}
+
+modifyChild() {
+	// females should not have a Y, males should have a Y
+	if (child.sex == "F")
+		return !child.genome2.containsMarkerMutation(m3, chromSize-1);
+	else
+		return child.genome2.containsMarkerMutation(m3, chromSize-1);
+}
+
+// Output
+genOut late() {
+	sim.treeSeqOutput(paste("gen_", community.tick, "/seed_", seed, "_popsize_", popSize, "_gen_", community.tick, ".trees", sep=""));
+}
+genOutCheckpoint late() {
+    sim.treeSeqOutput(paste("seed_", seed, "_popsize_", popSize, "_gen_", community.tick, ".trees", sep=""));
+}
