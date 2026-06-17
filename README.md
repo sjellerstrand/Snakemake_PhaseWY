@@ -2,8 +2,17 @@
 
 [![Example data](https://img.shields.io/badge/Example%20data-10.5281%2Fzenodo.19050140-blue)](https://doi.org/10.5281/zenodo.19050140)
 
+PhaseWY is an automated Snakemake pipeline that uses whole-genome sequencing data from multiple female and male individuals to identify sex-chromosomal regions and extract the corresponding Y/W sequences. PhaseWY (i) detects sex differences in alignment depth, (ii) applies read-based and statistical haplotype phasing, (iii) identifies sex-linked regions using haplotype clustering, and (iv) subsets autosomal, X/Z- and Y/W-linked variants for downstream analyses.
 
-## Description
+PhaseWY is currently published as a pre-print at bioXxiv.
+
+Refer to the [documentation](https://github.com/sjellerstrand/Snakemake_PhaseWY/documents/PhaseWY_documentation.doc/) for detailed description of each pipeline step.
+
+An example dataset is available at [zendo](https://doi.org/10.5281/zenodo.19050140).
+
+![Pipeline flowchart](documents/Figures/Pipeline_flowchart.png)
+
+## Pipeline overview
 This is a Snakemake version of the PhaseWY pipeline written in Snakemake 8. Miniconda3 has been installed in the project directory on Dardel in order to be able to run Snakemake with conda.
 
 The code for the pipeline has been split into ten separate Snakefiles (e.g. step1.smk, step2.smk...) files in the 'workflow/rules/' directory. These files are called by the main Snakefile and correspond to the original steps 1-10 bash scripts (e.g. PhaseWY_Step1-10.sh scripts). For the first few steps of the pipeline (e.g. steps 1-3), some parts are organized slightly differently than the original code.  
