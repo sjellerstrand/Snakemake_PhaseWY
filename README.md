@@ -1,7 +1,11 @@
 # PhaseWY version 2026-03-16
 
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19050140.svg)](https://doi.org/10.5281/zenodo.19050140)
+
+
 ## Description
-This is a Snakemake version of the PhaseWY pipeline written in Snakemake 8. Miniconda3 has been installed in the project directory on Dardel in order to be able to run Snakemake with conda. 
+This is a Snakemake version of the PhaseWY pipeline written in Snakemake 8. Miniconda3 has been installed in the project directory on Dardel in order to be able to run Snakemake with conda.
 
 The code for the pipeline has been split into ten separate Snakefiles (e.g. step1.smk, step2.smk...) files in the 'workflow/rules/' directory. These files are called by the main Snakefile and correspond to the original steps 1-10 bash scripts (e.g. PhaseWY_Step1-10.sh scripts). For the first few steps of the pipeline (e.g. steps 1-3), some parts are organized slightly differently than the original code.  
 
@@ -190,3 +194,5 @@ bgzip female_male_pair_phased.vcf
 tabix female_male_pair_phased.vcf.gz
 ```
 
+## Citation
+Ellerstrand JE., Churcher A., Kutschera VE., Hansson., B. 2026  PhaseWY: A pipeline for haplotype phasing, sex chromosome identification and extraction of sex-limited sequences, bioXxiv.
