@@ -182,7 +182,7 @@ snakemake -s workflow/PhaseWY --profile slurm --configfile config/config.yaml --
 snakemake -s workflow/PhaseWY --profile slurm --configfile config/config.yaml --dag | dot -Tsvg > DAG.svg
 ```
 
-#### Run the companion python script to extract Y/W sequences
+## Run the companion python script to extract Y/W sequences
 We provide phasing_female_male_pair.py, a companion python script that take a single female-male pair and output the heterogamete as two haploid sequeces, one putative X/Z and one putative Y/W. This phasing is applied to all variants provided in the vcf. Therefore, this script is only appropriate to apply to known sex-linked regions. To run the script, provide a vcf file (-i; gzipped or non-zipped) with one female and one male. The first individual should be the heterogamete, and the second the homogamete. The supplit the output file (-o). Not that the script does not output a gzipped file:
 ```
 python3 companion_scripts/phasing_female_male_pair.py -i female_male_pair.vcf.gz -o female_male_pair_phased.vcf
