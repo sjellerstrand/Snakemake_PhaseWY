@@ -132,7 +132,7 @@ ref_species: "Aarv" # only used for naming synteny species folder
 synteny_species: #"Pmaj" # only used for naming synteny species folder
 synteny_genome: #"example/Parus_major/GCF_001522545.3_Parus_major1.1_genomic.fasta"
 
-# Specify plotting parameters for genome summary plot
+#### Specify plotting parameters for genome summary plot
 ```
 width: 15000
 height: 800
