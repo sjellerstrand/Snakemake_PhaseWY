@@ -14,7 +14,6 @@ Refer to the [documentation](https://github.com/sjellerstrand/Snakemake_PhaseWY/
 
 #### Example data
 An example dataset is available at [zendo](https://doi.org/10.5281/zenodo.19050140).
-
 ![classification_info](documents/Figures/classification_info_edit.png)
 
 ## Pipeline overview
