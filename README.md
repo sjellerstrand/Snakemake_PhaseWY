@@ -1,7 +1,6 @@
 # PhaseWY version 2026-03-16
 
-
-[![Example data](https://zenodo.org/badge/DOI/10.5281/zenodo.19050140.svg)](https://doi.org/10.5281/zenodo.19050140)
+[![Example data](https://img.shields.io/badge/Example%20data-10.5281%2Fzenodo.19050140-blue)](https://doi.org/10.5281/zenodo.19050140)
 
 
 ## Description
