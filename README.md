@@ -15,7 +15,7 @@ Refer to the [documentation](https://github.com/sjellerstrand/Snakemake_PhaseWY/
 #### Example data
 An example dataset is available at [zendo](https://doi.org/10.5281/zenodo.19050140).
 
-![Pipeline flowchart](documents/Figures/Pipeline_flowchart.png)
+![classification_info](documents/Figures/classification_info_edit.png)
 
 ## Pipeline overview
 This is a Snakemake version of the PhaseWY pipeline written in Snakemake 8. Miniconda3 has been installed in the project directory on Dardel in order to be able to run Snakemake with conda.
