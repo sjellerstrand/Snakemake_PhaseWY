@@ -9,7 +9,7 @@ If you use PhaseWY in your research, please cite our pre-print at bioRxiv:
 **Ellerstrand JE., Churcher A., Kutschera VE., Hansson B. 2026. *PhaseWY: A pipeline for haplotype phasing, sex chromosome identification and extraction of sex-limited sequences*. bioRxiv.**
 
 #### Documentation
-Refer to the [documentation](https://github.com/sjellerstrand/Snakemake_PhaseWY/documents/PhaseWY_documentation.doc/) for detailed description of each pipeline step.
+Refer to the [documentation](https://github.com/sjellerstrand/Snakemake_PhaseWY/documents/PhaseWY_documentation.pdf/) for detailed description of each pipeline step.
 
 #### Example data
 An example dataset is available at [zendo](https://doi.org/10.5281/zenodo.19050140).
