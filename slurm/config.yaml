@@ -1,0 +1,242 @@
+# Configuration file for slurm plugin (Snakemake >8.0.0) for Dardel cluster at PDC/KTH snakemake CLI flags
+executor: slurm
+jobs: 100
+printshellcmds: true
+software-deployment-method: conda
+use-conda: True
+
+# Slurm resources
+## Default-resources. Used if no rule specific resources are not specified below
+default-resources: 
+  slurm_account: naiss2025-5-344 # update this to your slurm account
+  slurm_partition: shared # use Dardel shared partition
+  ntasks: 1 # number of concurrent tasks / ranks
+  threads: 8 # number of threads per task, corresponds to cpus-per-task. Cores = cpus-per-task*ntasks
+  runtime: 30 # default runtime in minutes
+
+# Set threads (include all rules for testing)
+set-threads:
+# Step 1
+  subset_genome: 2
+  index_genome: 2
+  get_depth_large: 8
+  get_depth_clump: 8
+  parse_depth_large: 2
+  parse_depth_clump: 2
+  filt_mask_large: 8
+  filt_mask_clump: 8
+# Step 2
+  sex_depth_difference_large: 8
+  sex_depth_difference_clump: 8
+  extract_sexlinked_regions_large: 16
+  extract_sexlinked_regions_clump: 8
+  sex_depth_windows_large: 8
+  sex_depth_windows_clump: 8
+  subsample_sexdiff_sites: 16
+# Step 3
+  summarize_vcf: 2
+  make_bed_filt_contigs: 8
+  format_vcf: 2
+# Step 4
+  split_vcf: 2
+  whatshap: 80
+  merge_whatshap: 8
+  find_singletons: 2
+  list_singletons: 2
+  find_nonphased_singletons: 2
+  find_hetgam_all_singletons: 2
+# Step 5
+  shapeit4: 16 # increase for faster execution
+  modify_vcf: 2
+# Step 6
+  make_mac_vcf: 2
+  sex_linkage_large: 16
+  sex_linkage_clump: 8
+  sexlinked_bed: 8
+  identify_sexlinked_ILS1_homozygotes: 2
+# Step 7
+  sex_link_hetgam_dropout_bed: 8
+  sex_link_homgam_vcfs: 2
+  sex_link_hetgam_vcfs: 2
+  split_hetgam_vcfs: 2
+  hetgam_sexlimited_vcf: 8
+  hetgam_sexshared_vcf: 8
+  merge_sexlimited_vcfs: 8
+  remove_hetgam_dropout: 2
+  merge_sexshared_vcfs: 8
+  hetgam_sexshared_dropout_vcfs: 2
+  sex_link_diploid2haploid: 2
+  concatenate_hom_het_vcfs: 8
+  merge_sex_link_homgam_hom_het_vcfs: 8
+  filter_sex_link_homgam_vcfs: 2
+  overlaps_het_homgam_bed: 16
+  sex_linked_ILS2_bed: 8
+  sex_depth_diff_homgam_vcfs: 2
+  sex_depth_diff_hetgam_vcfs: 2
+  sex_depth_diff_diploid2haploid: 2
+  merge_sex_depth_diff_homgam_hom_het_vcfs: 8
+  filter_sex_depth_diff_homgam_vcfs: 2
+  sex_depth_diff_autosomal_bed: 8
+  sex_depth_diff_autosomal_vcfs: 2
+# Step 8
+  cat_regions: 8
+  cat_htgm_dropout: 8
+  callable_regions_phased: 8
+  extract_sex_linked_regions: 16
+  cat_sexlinked_border_variants: 8
+  remove_border_variants: 8
+  make_missing_bed: 8
+  make_regions_bed: 8
+  sex_linked_ILS_sites: 8
+  save_singletons_bed: 8
+  save_all_unreliable_sites_bed: 16
+# Step 9
+  merge_phased_marker_vcfs: 8
+  merge_autosomal_vcfs: 8
+  make_sexshared_and_sexlimited_datasets: 8
+  save_nonphased_sites: 2
+  save_problematic_sex_linked_sites: 2
+  save_problem_sex_linked_incomplete_sorting: 2
+  save_singletons: 2
+  rule save_all_unreliable_sites: 8
+# Step 10
+  vcf_stats_pt1: 2
+  vcf_stats_pt2: 16
+  calc_pca: 8
+  plot_pc1_pc2: 8
+  plot_haplotype_cluster: 32
+  make_genome_summary_beds: 8
+  plot_genome_summary: 8
+  sexdiff_genome_summary_bed: 8
+  plot_sex_depth_distirbution: 8
+  synteny_alignment: 128
+  liftover: 8
+  plot_liftover_genome_summary: 16
+
+# Set-resources for each rule (include all rules for testing)
+set-resources:
+# Step 1
+  - subset_genome:runtime=30
+  - index_genome:runtime=30
+  - get_depth_large:runtime=120
+  - get_depth_large:mem_mb=128000 # increase if more memory needed
+  - get_depth_clump:runtime=360
+  - get_depth_clump:mem_mb=8000 # increase if more memory needed
+  - parse_depth_large:runtime=360
+  - parse_depth_clump:runtime=720
+  - filt_mask_large:runtime=60
+  - filt_mask_clump:runtime=720
+# Step 2
+  - sex_depth_difference_large:runtime=360
+  - sex_depth_difference_clump:runtime=720
+  - extract_sexlinked_regions_large:runtime=60
+  - extract_sexlinked_regions_clump:runtime=120
+  - sex_depth_windows_large:runtime=120
+  - sex_depth_windows_clump:runtime=120
+  - subsample_sexdiff_sites:runtime=120
+# Step 3
+  - summarize_vcf:runtime=120
+  - make_bed_filt_contigs:runtime=120
+  - format_vcf:runtime=360
+# Step 4
+  - split_vcf:runtime=120
+  - whatshap:runtime=7200
+  - whatshap:mem_mb=128000 # increase if more memory needed
+  - merge_whatshap:runtime=720
+  - find_singletons:runtime=120
+  - list_singletons:runtime=30
+  - find_nonphased_singletons:runtime=3600
+  - find_hetgam_all_singletons:runtime=120
+# Step 5
+  - shapeit4:runtime=360
+  - shapeit4:mem_mb=80000 # increase if more memory needed
+  - modify_vcf:runtime=360
+# Step 6
+  - make_mac_vcf:runtime=120
+  - sex_linkage_large:runtime=1200
+  - sex_linkage_large:mem_mb=24000 # increase if more memory needed
+  - sex_linkage_clump:runtime=360
+  - sexlinked_bed:runtime=30
+  - identify_sexlinked_ILS1_homozygotes:runtime=60
+# Step 7
+  - sex_link_autosomal_bed:runtime=30
+  - sex_link_hetgam_dropout_bed:runtime=30
+  - sex_link_homgam_vcfs:runtime=120
+  - sex_link_hetgam_vcfs:runtime=120
+  - split_hetgam_vcfs:runtime=120
+  - split_hetgam_vcfs:mem_mb=16000 # increase if more memory needed
+  - hetgam_sexlimited_vcf:runtime=120
+  - hetgam_sexlimited_vcf:mem_mb=8000
+  - hetgam_sexshared_vcf:runtime=120
+  - hetgam_sexshared_vcf:mem_mb=8000
+  - merge_sexlimited_vcfs:runtime=120
+  - remove_hetgam_dropout:runtime=120
+  - merge_sexshared_vcfs:runtime=120
+  - hetgam_sexshared_dropout_vcfs:runtime=120
+  - sex_link_diploid2haploid:runtime=120
+  - concatenate_hom_het_vcfs:runtime=120
+  - concatenate_hom_het_vcfs:mem_mb=8000
+  - merge_sex_link_homgam_hom_het_vcfs:runtime=120
+  - filter_sex_link_homgam_vcfs:runtime=120
+  - overlaps_het_homgam_bed:runtime=120 
+  - overlaps_het_homgam_bed:mem_mb=64000 # increase if more memory needed
+  - sex_linked_ILS2_bed:runtime=120
+  - sex_depth_diff_homgam_vcfs:runtime=120
+  - sex_depth_diff_hetgam_vcfs:runtime=120
+  - sex_depth_diff_diploid2haploid:runtime=120
+  - merge_sex_depth_diff_homgam_hom_het_vcfs:runtime=120
+  - filter_sex_depth_diff_homgam_vcfs:runtime=120
+  - sex_depth_diff_autosomal_bed:runtime=30
+  - sex_depth_diff_autosomal_vcfs:runtime=120
+  - sex_depth_diff_autosomal_vcfs:mem_mb=8000 # increase if more memory needed
+# Step 8
+  - cat_regions:runtime=30
+  - cat_htgm_dropout:runtime=30
+  - callable_regions_phased:runtime=30
+  - extract_sex_linked_regions:runtime=30
+  - extract_sex_linked_regions:mem_mb=16000 # increase if more memory needed
+  - cat_sexlinked_border_variants:runtime=30
+  - cat_sexlinked_border_variants:mem_mb=16000 # increase if more memory needed
+  - remove_border_variants:runtime=30
+  - make_missing_bed:runtime=30
+  - make_regions_bed:runtime=30
+  - make_regions_bed:mem_mb=16000 # increase if more memory needed
+  - sex_linked_sites:runtime=30
+  - save_singletons_bed:runtime=60
+  - save_all_unreliable_sites_bed:runtime=30
+  - save_all_unreliable_sites_bed:mem_mb=16000 # increase if more memory needed
+# Step 9
+  - merge_phased_marker_vcfs:runtime=120
+  - merge_phased_marker_vcfs:mem_mb=16000 # increase if more memory needed
+  - merge_autosomal_vcfs:runtime=120
+  - merge_autosomal_vcfs:mem_mb=16000 # increase if more memory needed
+  - make_sexshared_and_sexlimited_datasets:runtime=120
+  - make_sexshared_and_sexlimited_datasets:mem_mb=16000 # increase if more memory needed
+  - save_nonphased_sites:runtime=60
+  - save_problematic_sex_linked_sites:runtime=30
+  - save_problem_sex_linked_incomplete_sorting:runtime=360
+  - save_singletons:runtime=360
+  - rule save_all_unreliable_sites:runtime=120
+# Step 10
+  - vcf_stats_pt1:runtime=180
+  - vcf_stats_pt2:runtime=60
+  - vcf_stats_pt2:mem_mb=44000 # increase if more memory needed
+  - calc_pca:runtime=60
+  - calc_pca:mem_mb=16000 # increase if more memory needed
+  - plot_pc1_pc2:runtime=30
+  - plot_haplotype_cluster:runtime=60
+  - plot_haplotype_cluster:mem_mb=16000 # increase if more memory needed
+  - make_genome_summary_beds:runtime=30
+  - make_genome_summary_beds:mem_mb=16000 # increase if more memory needed
+  - plot_genome_summary:runtime=60
+  - plot_genome_summary:mem_mb=16000 # increase if more memory needed
+  - sexdiff_genome_summary_bed:runtime=30
+  - sexdiff_genome_summary_bed:mem_mb=16000 # increase if more memory needed
+  - plot_sex_depth_distirbution:runtime=60
+  - synteny_alignment:runtime=360
+  - synteny_alignment:slurm_partition=memory # Adjust partition if needed
+  - synteny_alignment:mem_mb=440000 # increase if more memory needed
+  - liftover:runtime=60
+  - liftover:mem_mb=16000 # increase if more memory needed
+  - plot_liftover_genome_summary:runtime=60
+  - plot_liftover_genome_summary:mem_mb=16000 # increase if more memory needed

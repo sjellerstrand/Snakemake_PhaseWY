@@ -1,0 +1,7 @@
+name: Snakemake_PhaseWY
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - snakemake=8.27.1
+  - snakemake-executor-plugin-slurm=0.15.0

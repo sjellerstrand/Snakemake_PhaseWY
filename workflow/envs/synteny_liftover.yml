@@ -1,0 +1,9 @@
+name: synteny_liftover
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - bedtools=2.31.0
+  - mummer4=4.0.1
+  - crossmap=0.7.3
+  - perl=5.32

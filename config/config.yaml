@@ -1,0 +1,129 @@
+# This config file contains the paths to input
+# files used by the pipeline. These paths are
+# project specific and need to be set by the 
+# user.  This config also contains filtering
+# and run parameters that need to be set/adjusted
+# by the user.
+
+
+###############################################
+###############################################
+############ User specified files #############
+###############################################
+###############################################
+
+# Top folder name for project
+project: "Rasolark_test"
+
+# List of contigs to include
+contig_list: "config/contig_list.txt"
+
+# Sample info table 'sample.tsv' (sample_name,depth,sex,ploidy,bamfile)
+# In 'samples_all.tsv', there are 18 samples (9 males, 9 females)
+sample_table: "config/samples_all.tsv"
+
+# Reference files (e.g. vcf, genome assembly and mask files.
+input_vcf: "example/Rasolark_variants.vcf.gz"  # Multi-sample vcf file
+genome: "example/Rasolark_2021_consensus_reference.fasta"   # Path to genome assembly
+mask: "example/Rasolark_masked_repeats.bed" # masked regions
+
+# Clump small contigs
+# Some steps are run per contig. For fragmented genomes, 
+# all contigs shorter than a specified length can be
+# clumped into the same job. The length is specified in Mb
+clump_max_len: 1 # Mb
+
+###############################################
+###############################################
+########### Step1: Filter parameters ##########
+###############################################
+###############################################
+
+# Filtering parameters for callable sites
+min_dp: 5           # Min. accepted depth for an individual genotype to be kept
+min_mean: 7.45744   # Min. accepted mean depth for a site to be kept
+max_mean: 46.4166   # Max. accepted mean depth for a site to be kept
+missing: 0.95       # Max. accepted missingnsess for a site to be kept
+
+###############################################
+###############################################
+######### Step2: Sex depth threshold ##########
+###############################################
+###############################################
+
+# Set thershold for determining sex linkage due to sex differences
+# in normalized depth (hetgam depth/homgam depth)
+sex_depth_threshold: 0.75
+
+# Set percentage of variants to subsample for depth distribution plot
+subsample: 0.01 # Percent
+
+###############################################
+###############################################
+########### Step4: Disable WhatsHap ###########
+###############################################
+###############################################
+
+# WhatHap is the most demanding step of the
+# pipeline, but perhaphs the most important
+# for phasing of singletons and successful
+# phasing of small datasets. However,
+# WhatsHap can be disabled by setting the
+# following option to "OFF"
+
+whatshap: "ON"
+
+###############################################
+###############################################
+##### Step6: Sex-linkage search parameters ####
+###############################################
+###############################################
+
+# Haplotype clustering parameters (Step 6: sex-linkage)
+mac: 1                # Minor allele count to filter for haplotype clustering
+window: 10000         # Number of sites used per window for haplotype clustering
+step: 2500            # Number of sites for each sliding window step for haplotype clustering
+dist_model: "Hamming" # Hamming distance is default. Can also be set as "Inverse_MAF" to give rare alleles heigher weight.
+
+###############################################
+###############################################
+##### Step10: Statistics for output vcfs  #####
+###############################################
+###############################################
+
+# Specify output vcfs for which statistics
+# should be calculated. The filenames listed 
+# below should not be modified since they
+# correspond to earlier pipeline steps. 
+# Instead, comment out any of the results 
+# files where statistics are not needed.
+
+results_vcf:
+ - phased_all_variants
+ - autosomal
+ - sexlimited
+ - sexshared
+ - autosomal_filtered
+ - sexlimited_filtered
+ - sexshared_filtered
+ - nonphased_variants 
+ - border_variants
+ - all_inds_ILS1_not_hetgam_dropout
+ - sexshared_ILS1_not_hetgam_dropout
+ - sexlimited_ILS1_not_hetgam_dropout
+ - all_inds_ILS2
+ - sexshared_ILS2
+ - sexlimited_ILS2
+ - heterogametic_sexlinked_singletons
+ - all_unreliable_sites
+
+# Specify path to synteny genome for lift over and genome summary plot (will only run if file exists)
+ref_species: "Araz" # only used for naming synteny species folder
+synteny_species: #"Pmaj" # only used for naming synteny species folder
+synteny_genome: #"example/GCF_001522545.3_Parus_major1.1_genomic.fasta"
+
+# Specify plotting parameters for genome summary plot
+# min_len referes to minimum contig length in Mb
+width: 15000
+height: 1000
+min_len: 1

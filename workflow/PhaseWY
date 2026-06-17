@@ -1,0 +1,137 @@
+# PhaseWY version 2026-03-16
+
+from snakemake.utils import min_version
+
+#### Set minimum snakemake version #####
+min_version("8.0.0")
+
+# This is for the 'samples.tsv' file
+import pandas as pd
+import os
+
+# Config file
+configfile: "config/config.yaml"
+
+# Read project name
+project = config["project"]
+
+# Read pipeline settings
+clump_max_len=config["clump_max_len"]
+sex_depth_threshold=config["sex_depth_threshold"]
+subsample=config["subsample"]
+whatshap=config["whatshap"]
+if whatshap != "OFF":
+	whatshap="ON"
+mac=config["mac"]
+window=config["window"]
+step=config["step"]
+dist_model=config["dist_model"]
+
+# Define output paths
+if config.get("synteny_genome") and os.path.exists(config["synteny_genome"]) and config.get("synteny_species", "").strip():
+	results_synteny="results/"+ config["ref_species"] + "_to_" + config["synteny_species"] + "/"
+	synteny_name=config["ref_species"] + "_to_" + config["synteny_species"]
+
+results="results/" + project + "_sex_depth_" + str(sex_depth_threshold) + "_whatshap_" + whatshap + "/"
+intermediate="intermediate/" + project + "_sex_depth_" + str(sex_depth_threshold) + "_whatshap_" + whatshap + "/"
+results_clust_settings = results + "mac_" + str(mac) + "_window_" + str(window) + "_step_" + str(step) + "_model_" + dist_model + "/"
+intermediate_clust_settings = intermediate + "mac_" + str(mac) + "_window_" + str(window) + "_step_" + str(step) + "_model_" + dist_model + "/"
+logs_dir="logs/" + project + "_sex_depth_" + str(sex_depth_threshold) + "_whatshap_" + whatshap + "/"
+
+# Read sample table (column names are: sample_name, depth, sex, ploidy, bamfile)
+sample_df=pd.read_table(config["sample_table"]).set_index("sample_name", drop=False)
+
+# Get a list of heterogametic samples from sample_df
+s = sample_df['sex'].str.contains("HETGAM")
+hetgam_samples = s.index[s]
+
+# Read contigs from the user supplied list. 
+genome_path = config["genome"]
+if "contig_list" in config and config["contig_list"] and os.path.exists(config["contig_list"]):
+	contig_path = config["contig_list"]
+	contig_df = pd.read_table(contig_path, index_col=0, header=None)
+elif os.path.exists(genome_path + ".fai"):
+	contig_path = genome_path + ".fai"
+	contig_df = pd.read_table(contig_path, usecols=[0], header=None, names=["contig"], index_col=0)
+
+# Include individual step snakefiles
+include: "rules/step1.smk"
+include: "rules/step2.smk"
+include: "rules/step3.smk"
+include: "rules/step4.smk"
+include: "rules/step5.smk"
+include: "rules/step6.smk"
+include: "rules/step7.smk"
+include: "rules/step8.smk"
+include: "rules/step9.smk"
+include: "rules/step10.smk"
+
+# Rule all
+# All output files from the pipeline that are not used for any other rule are listed here
+all_inputs = [
+	#results_clust_settings + "beds/hetgam_dropout.bed",
+	#results_clust_settings + "beds/border_variants.bed",
+	#results_clust_settings + "beds/target_region.bed",
+	results_clust_settings + "beds/missing_region.bed",
+	#results_clust_settings + "beds/callable_regions_phased.bed",
+	#results_clust_settings + "beds/nonphased_contigs.bed",
+	results_clust_settings + "beds/phase_windows.bed",
+	results_clust_settings + "beds/phase_info.bed",
+	results_clust_settings + "beds/phase_sex_linked.bed",
+	#results_clust_settings + "beds/callable_phase_sex_linked.bed",
+	#results_clust_settings + "beds/target_phase_hetgam_dropout.bed",
+	#results_clust_settings + "beds/sex_linked.bed",
+	#results_clust_settings + "beds/sexshared.bed",
+	#results_clust_settings + "beds/sexlimited.bed",
+	#results_clust_settings + "beds/autosomal.bed",
+	#results_clust_settings + "beds/sex_linked_ILS1.bed",
+	#results_clust_settings + "beds/sex_linked_ILS1_not_hetgam_dropout.bed",
+	#results_clust_settings + "beds/sex_linked_ILS2.bed",
+	#results_clust_settings + "beds/nonphased_singletons_htgm_singletons.bed",
+	#results_clust_settings + "beds/nonphased_singletons_htgm_sexlinked_singletons.bed",
+	#results_clust_settings + "beds/all_unreliable_sites.bed",
+	intermediate_clust_settings + "extract_sex_linked_regions_done",
+	#results_clust_settings + "vcfs/phased_all_variants.vcf.gz",
+	#results_clust_settings + "vcfs/nonphased_variants.vcf.gz",
+	#results_clust_settings + "vcfs/border_variants.vcf.gz",
+	#results_clust_settings + "vcfs/autosomal.vcf.gz",
+	#results_clust_settings + "vcfs/sexshared.vcf.gz",
+	#results_clust_settings + "vcfs/sexlimited.vcf.gz",
+	#results_clust_settings + "vcfs/autosomal_fitlered.vcf.gz",
+	#results_clust_settings + "vcfs/sexshared_fitlered.vcf.gz",
+	#results_clust_settings + "vcfs/sexlimited_fitlered.vcf.gz",
+	#results_clust_settings + "vcfs/all_inds_ILS1_not_hetgam_dropout.vcf.gz",
+	#results_clust_settings + "vcfs/sexshared_ILS1_not_hetgam_dropout.vcf.gz",
+	#results_clust_settings + "vcfs/sexlimited_ILS1_not_hetgam_dropout.vcf.gz",
+	#results_clust_settings + "vcfs/all_inds_ILS2.vcf.gz",
+	#results_clust_settings + "vcfs/sexshared_ILS2.vcf.gz",
+	#results_clust_settings + "vcfs/sexlimited_ILS2.vcf.gz",
+	#results_clust_settings + "vcfs/heterogametic_sexlinked_singletons.vcf.gz",
+	#results_clust_settings + "vcfs/all_unreliable_sites.vcf.gz",
+	#intermediate_clust_settings + "vcfs/merge_phased_marker_vcfs_done.txt",
+	#intermediate_clust_settings + "vcfs/nonphased_variants_done.txt",
+	#intermediate_clust_settings + "vcfs/border_variants_done.txt",
+	#intermediate_clust_settings + "vcfs/merge_autosomal_vcfs_done.txt",
+	#intermediate_clust_settings + "vcfs/merge_sexshared_and_sexlimited_vcfs_done.txt",
+	#intermediate_clust_settings + "vcfs/ILS_done.txt",
+	#intermediate_clust_settings + "vcfs/singletons_done.txt",
+	#intermediate_clust_settings + "vcfs/all_unreliable_sites_done.txt",
+	expand(intermediate_clust_settings + "stats/{results_vcf}/{results_vcf}_filter_stats_rscript.done", results_vcf=config["results_vcf"]),
+	expand(intermediate_clust_settings + "pca/{results_vcf}/{results_vcf}_pca.done", results_vcf=config["results_vcf"]),
+	intermediate_clust_settings + "genome_summary/haplotype_cluster_summary_done.txt",
+	#results_clust_settings + "genome_summary/Genome_summary.bed",
+	intermediate_clust_settings + "genome_summary/genome_summary.done",
+	intermediate_clust_settings + "genome_summary/sexdiff_genome_summary_subset_" +  str(subsample) + "_percent.done"
+]
+
+# Conditionally add synteny output
+if config.get("synteny_genome") and os.path.exists(config["synteny_genome"]) and config.get("synteny_species", "").strip():
+	all_inputs.append(
+		#results_synteny + synteny_name + "_synteny_alignment.done",
+		#results_synteny + synteny_name + ".filtered.delta",
+		intermediate_clust_settings + "genome_summary/" + synteny_name + "_liftover_genome_summary.done"
+	)
+
+rule all:
+	input:
+		all_inputs

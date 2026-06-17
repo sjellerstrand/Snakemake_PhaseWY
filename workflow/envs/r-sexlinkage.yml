@@ -1,0 +1,7 @@
+name: r-sexlinkage
+channels:
+  - conda-forge
+dependencies:
+  - r=4.0
+  - r-vcfr=1.10.0
+  - r-data.table=1.12.8 
