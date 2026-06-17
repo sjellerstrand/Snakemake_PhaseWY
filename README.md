@@ -2,7 +2,7 @@
 
 [![Example data](https://img.shields.io/badge/Example%20data-10.5281%2Fzenodo.19050140-blue)](https://doi.org/10.5281/zenodo.19050140)
 
-![Pipeline flowchart](documents/Figures/Larks.png)
+![Larks](documents/Figures/Larks.png)
 
 PhaseWY is an automated Snakemake pipeline that uses whole-genome sequencing data from multiple female and male individuals to identify sex-chromosomal regions and extract the corresponding Y/W sequences. PhaseWY (i) detects sex differences in alignment depth, (ii) applies read-based and statistical haplotype phasing, (iii) identifies sex-linked regions using haplotype clustering, and (iv) subsets autosomal, X/Z- and Y/W-linked variants for downstream analyses.
 
