@@ -7,7 +7,7 @@ The code for the pipeline has been split into ten separate Snakefiles (e.g. step
 
 In order to run the pipeline, the **'config/config.yaml'** file must be modified with the project-specific settings and paths. The compute project will also need to be added to the **'slurm/config.yaml'** file along with any additional resource adjustments. The instructions for this can be found below.
 
-## Setting up the 'config/config.yaml' file.
+## Setting up the 'config/config.yaml' file
 The 'config.yaml' file contains paths to relevant input files required by the pipeline. It also contains filtering and run parameters that should be set by the user. Descriptions of the required input is included below.
 
 #### Project name
@@ -59,7 +59,7 @@ CADDXX010000001.1	2487	2521
 CADDXX010000001.1	5104	5111
 ```
 
-# Clump small contigs
+#### Clump small contigs
 Some steps are run per contig. For fragmented genomes, 
 all contigs shorter than a specified length can be
 clumped into the same job. The length is specified in Mb
@@ -76,19 +76,19 @@ max_mean: 46.41
 missing: 0.95
 ```
 
-# Set thershold for determining sex linkage due to sex differences
+#### Set thershold for determining sex linkage due to sex differences
 When Y/W sequences have completely degenerated, the normalized sex depth of heterogametes should be close to 0.5, while autosomal regions should be close to 1. The **sex_depth_threshold** can be set to a threshold value to determine wether a site is sex-linekd or not. Everything below the set threshold will be determined as sex-linked, and no Y/W sequences will be extracted for mthose regions.
 ```
 sex_depth_threshold: 0.75
 ```
 
-# Set percentage of variants to subsample for depth distribution plot
+#### Set percentage of variants to subsample for depth distribution plot
 Sampling every site in the genome will both be computer heavy and redundant. Here it is possible adjust the percentage of sites to randomly subsample for distribution plots. A higher percentage can be set if only a specific chromosome is being analysed, while a whole genome might require a lower percentage to avoid memory limitations.
 ```
 subsample=0.01
 ```
 
-# Toggle read-based phasing with WhatHap
+#### Toggle read-based phasing with WhatHap
 WHatsHap is the most demanding step of the pipeline, but perhaphs the most important for phasing of singletons and successful phasing of small datasets. However, WhatsHap can be disabled by setting the following option to "OFF". Anything else will default to "ON"
 ```
 disable_whatshap: "OFF"
@@ -127,7 +127,7 @@ results_vcf:
  - all_unreliable_sites
 ```
 
-# Specify path to synteny genome for lift over and genome summary plot (will only run if file exists)
+#### Specify path to syntenic reference genome for lift over and genome summary plot (will only run if file exists)
 ref_species: "Aarv" # only used for naming synteny species folder
 synteny_species: #"Pmaj" # only used for naming synteny species folder
 synteny_genome: #"example/Parus_major/GCF_001522545.3_Parus_major1.1_genomic.fasta"
@@ -159,7 +159,7 @@ Create a new tmux or screen session. Then activate the encironment from within t
 conda activate Snakemake_PhaseWY
 ```
 
-#### Run the pipeline
+## Run the pipeline
 The pipeline is run from within the main snakemake folder, since all paths within the pipeline are relative:
 
 ```
