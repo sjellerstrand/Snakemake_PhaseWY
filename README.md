@@ -1,13 +1,13 @@
 # PhaseWY version 2026-03-16
 
-[![Example data](https://img.shields.io/badge/Example%20data-10.5281%2Fzenodo.19050140-blue)](https://doi.org/10.5281/zenodo.19050140)
+[![Preprint](https://img.shields.io/badge/bioRxiv-10.64898/2026.06.17.732863-BD2736)](https://doi.org/10.64898/2026.06.17.732863) [![Example dataset](https://img.shields.io/badge/Example%20data-10.5281%2Fzenodo.19050140-095FB9)](https://doi.org/10.5281/zenodo.19050140)
 
 PhaseWY is an automated Snakemake pipeline that uses whole-genome sequencing data from multiple female and male individuals to identify sex-chromosomal regions and extract the corresponding Y/W sequences. PhaseWY (i) detects sex differences in alignment depth, (ii) applies read-based and statistical haplotype phasing, (iii) identifies sex-linked regions using haplotype clustering, and (iv) subsets autosomal, X/Z- and Y/W-linked variants for downstream analyses.
 
 ![Larks](documents/Figures/Larks.png)
 #### Citation
 If you use PhaseWY in your research, please cite our pre-print at bioRxiv:  
-**Ellerstrand JE., Churcher A., Kutschera VE., Hansson B. 2026. *PhaseWY: A pipeline for haplotype phasing, sex chromosome identification and extraction of sex-limited sequences*. bioRxiv.**
+**Ellerstrand, S.J., Churcher, A., Kutschera, V.E., Hansson, B. 2026. *PhaseWY: A pipeline for haplotype phasing, sex chromosome identification and extraction of sex-limited sequences*. bioRxiv. https://doi.org/10.64898/2026.06.17.732863**
 
 #### Documentation
 Refer to the [documentation](https://github.com/sjellerstrand/Snakemake_PhaseWY/blob/main/documents/PhaseWY_2026-03-17_documentation.pdf) for detailed description of each pipeline step.
